@@ -25,7 +25,7 @@ jobs:
             [default]
             aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws_secret_access_key = ${{ secrets.AWS_SECRET_KEY_ID }}
-            region = us-east-2
+            region = us-east-1
             source_profile = default" > ~/.aws/credentials
 
             touch ~/.cdsapirc
