@@ -31,7 +31,7 @@ def fetch_era5(date, variables_long_name):
                    'tmp.nc')
 
 
-@task()
+#@task()
 def list_available_data_not_in_bucket():
     """
     Determines list of all possible unique single variable daily files from a list of dates.
@@ -60,7 +60,7 @@ def list_available_data_not_in_bucket():
         .values
 
 
-@task(max_retries=5, retry_delay=timedelta(minutes=5))
+#@task(max_retries=5, retry_delay=timedelta(minutes=5))
 def save_unique_variable_date_file(dates_vars):
 
     fs = fsspec.filesystem('s3', **Config.STORAGE_OPTIONS)
@@ -93,8 +93,8 @@ def save_unique_variable_date_file(dates_vars):
 
 
 if __name__ == '__main__':
-    with Flow("ERA5-ETL") as flow:
-        dates_vars: np.array = list_available_data_not_in_bucket()
-        save_unique_variable_date_file.map(dates_vars)
+    #with Flow("ERA5-ETL") as flow:
+    dates_vars: np.array = list_available_data_not_in_bucket()
+    save_unique_variable_date_file.map(dates_vars)
 
-    flow.run()
+    #flow.run()
