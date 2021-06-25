@@ -20,7 +20,6 @@ def fetch_era5(date, variables_long_name):
     request = {'format': 'netcdf',
                'product_type': 'reanalysis',
                'variable': variables_long_name,
-               'area': [63, -96, 40, -52],  # North, West, South, East. Default: global,
                'year': "{:04d}".format(date.year),
                'month': "{:02d}".format(date.month),
                'day': "{:02d}".format(date.day),
