@@ -2,7 +2,7 @@ name: DataOps
 
 on:
   schedule:
-    - cron: '0 7 * * *'
+    - cron: '0 */6 * * *'
 
 jobs:
   run:
@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
         with:
-          activate-environment: era5-forge
+          activate-environment: era5-pavics
           environment-file: .binder/environment.yml
           python-version: 3.8
           auto-activate-base: false
