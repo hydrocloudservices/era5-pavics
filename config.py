@@ -19,31 +19,8 @@ class Config(object):
     START_DATE = "1979-01-01"
     END_DATE = (datetime.utcnow() - timedelta(days=5)).strftime('%Y-%m-%d')
 
-    VARIABLES = {'snow_albedo': 'asn',
-                 'convective_available_potential_energy': 'cape',
-                 'convective_precipitation': 'cp',
-                 'convective_snowfall': 'csf',
-                 '2m_dewpoint_temperature': 'd2m',
-                 'evaporation': 'e',
-                 'large_scale_snowfall': 'lsf',
-                 'large_scale_precipitation': 'lsp',
-                 'maximum_2m_temperature_since_previous_post_processing': 'mn2t',
-                 'minimum_2m_temperature_since_previous_post_processing': 'mx2t',
-                 'precipitation_type':'ptype',
-                 'runoff':'ro',
-                 'snow_depth': 'sd',
-                 'snowfall': 'sf',
-                 'surface_runoff': 'sro',
-                 'surface_net_solar_radiation': 'ssr',
-                 '2m_temperature': 't2m',
-                 'total_cloud_cover': 'tcc',
-                 'total_column_rain_water': 'tcrw',
-                 'total_column_water': 'tcw',
-                 'total_column_water_vapour': 'tcwv',
-                 'total_precipitation': 'tp',
-                 'temperature_of_snow_layer': 'tsn',
-                 '10m_u_component_of_wind': 'u10',
-                 '10m_v_component_of_wind': 'v10'}
+    VARIABLES = {'2m_temperature': 't2m',
+                 'total_precipitation': 'tp'} # 'snowfall': 'sf'
 
     TIMES = ['00:00', '01:00', '02:00',
              '03:00', '04:00', '05:00',
