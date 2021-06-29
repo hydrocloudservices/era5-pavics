@@ -12,7 +12,7 @@ from itertools import product
 from config import Config
 
 
-def fetch_era5(date, variables_long_name):
+def fetch_era5(date, variables_long_name, download_filename):
     c = cdsapi.Client()
 
     name = 'reanalysis-era5-single-levels'
@@ -28,7 +28,7 @@ def fetch_era5(date, variables_long_name):
 
     r = c.retrieve(name,
                    request,
-                   'tmp.nc')
+                   download_filename)
 
 
 @task()
@@ -71,9 +71,13 @@ def save_unique_variable_date_file(dates_vars):
                                  for var_long_name, var_short_name in Config.VARIABLES.items()
                                  if var_short_name in list(map(lambda x: x.lower(), variables))]
 
-    fetch_era5(chosen_date, variables_long_name)
+    download_filename = "tmp-{:04d}{:02d}{:02d}".format(chosen_date.year,
+                                                        chosen_date.month,
+                                                        chosen_date.day)
 
-    ds = xr.open_mfdataset('tmp.nc')
+    fetch_era5(chosen_date, variables_long_name, download_filename)
+
+    ds = xr.open_dataset(download_filename)
     if 'expver' in list(ds.dims):
         ds = ds.reduce(np.nansum, 'expver')
 
@@ -85,11 +89,12 @@ def save_unique_variable_date_file(dates_vars):
 
         ds[var.lower()].to_netcdf(filename)
         print(filename)
+        print(ds[var.lower()])
         fs.put(filename,
                os.path.join(Config.BUCKET,
                             filename))
         os.remove(filename)
-    os.remove('tmp.nc')
+    os.remove(download_filename)
 
 
 if __name__ == '__main__':
