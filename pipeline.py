@@ -13,6 +13,7 @@ from config import Config
 
 
 def fetch_era5(date, variables_long_name, download_filename):
+    
     c = cdsapi.Client()
 
     name = 'reanalysis-era5-single-levels'
