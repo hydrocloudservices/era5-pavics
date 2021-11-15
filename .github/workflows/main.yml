@@ -6,8 +6,7 @@ on:
 
   
 jobs:
-  run:
-
+  cronjob-based-github-action:
     name: Hydat-Forge Data Pipeline
     runs-on: ubuntu-latest
     steps:
@@ -36,3 +35,4 @@ jobs:
             " > ~/.cdsapirc
 
             python pipeline.py
+      - uses: gautamkrishnar/keepalive-workflow@master # using the workflow with default settings
