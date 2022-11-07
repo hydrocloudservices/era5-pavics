@@ -16,8 +16,8 @@ class Config(object):
                        }
 
     # Dataset
-    START_DATE = "1979-01-01"
-    END_DATE = (datetime.utcnow() - timedelta(days=6)).strftime('%Y-%m-%d')
+    START_DATE = "1959-01-01"
+    END_DATE = (datetime.utcnow() - timedelta(days=5)).strftime('%Y-%m-%d')
 
     VARIABLES = {'2m_temperature': 't2m',
                  'total_precipitation': 'tp'} # 'snowfall': 'sf'
