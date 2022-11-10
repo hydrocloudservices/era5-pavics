@@ -79,6 +79,9 @@ def save_unique_variable_date_file(dates_vars):
     fetch_era5(chosen_date, variables_long_name, download_filename)
 
     ds = xr.open_dataset(download_filename)
+    ds = ds.assign_coords({"longitude": (((ds.longitude + 180) % 360) - 180)})
+    ds = ds.sortby(ds.longitude)
+        
     if all(pd.date_range(chosen_date, periods=24, freq='H') == ds.time.values):
         if 'expver' in list(ds.dims):
             ds = ds.reduce(np.nansum, 'expver')
