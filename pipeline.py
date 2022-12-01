@@ -93,8 +93,7 @@ def save_unique_variable_date_file(dates_vars):
                                                                                 chosen_date.day,
                                                                                 var.upper())
 
-                encoding = {var.lower():{"zlib": True, "complevel": 9}}
-                ds[var.lower()].to_netcdf(filename, encoding=encoding)
+                ds[var.lower()].to_netcdf(filename)
                 print(filename)
                 print(ds[var.lower()])
                 fs.put(filename,
