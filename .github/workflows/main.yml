@@ -16,7 +16,7 @@ jobs:
           activate-environment: era5-pavics
           environment-file: .binder/environment.yml
           mamba-version: "*"
-          python-version: 3.8
+          python-version: 3.9
           auto-activate-base: false
       - shell: bash -l {0}
         run: |
