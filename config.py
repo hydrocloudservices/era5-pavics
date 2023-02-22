@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 class Config(object):
 
     # Bucket configuration
-    BUCKET = 's3://era5/world/reanalysis/single-levels/netcdf'
+    BUCKET = 's3://era5/world/reanalysis/single-levels/netcdf4'
     CLIENT_KWARGS = {'endpoint_url': 'https://s3.us-east-1.wasabisys.com',
                      'region_name': 'us-east-1'}
     CONFIG_KWARGS = {'max_pool_connections': 30}
