@@ -76,31 +76,67 @@ def save_unique_variable_date_file(dates_vars):
                                                         chosen_date.month,
                                                         chosen_date.day)
 
-    fetch_era5(chosen_date, variables_long_name, download_filename)
+    fetch_era5(chosen_date, variables_long_name)
 
-    ds = xr.open_dataset(download_filename)
-    ds.coords['longitude'] = (ds.coords['longitude'] + 180) % 360 - 180
-    ds = ds.sortby(ds.longitude)
-        
-    if all(pd.date_range(chosen_date, periods=24, freq='H') == ds.time.values):
+    import cfgrib
+
+    ds_list = cfgrib.open_datasets('tmp.grib2')
+
+    for ds in ds_list:
+        print(ds.valid_time)
+        # ds = ds.squeeze()
+
+        if 'step' in list(ds.dims):
+            if any(ds.time.shape) == True:
+                ds = ds.stack(z=('time', 'step')).reset_index('z')
+                # ds['z'] = ds.time + ds.step.fillna(0)
+                ds['z'] = (ds.time + ds.step.fillna(0)).values.reshape(-1)
+                cleaned_list = [x for x in list(ds.coords.keys()) if x not in ['latitude', 'longitude', 'z']]
+                ds = ds.drop(cleaned_list) \
+                    .dropna('z', how='all') \
+                    .rename({'z': 'time'})
+            else:
+                ds['step'] = (ds.time + ds.step.fillna(0)).values.reshape(-1)
+                cleaned_list = [x for x in list(ds.coords.keys()) if x not in ['latitude', 'longitude', 'step']]
+                ds = ds.drop(cleaned_list) \
+                    .dropna('step', how='all') \
+                    .rename({'step': 'time'})
+        else:
+            cleaned_list = [x for x in list(ds.coords.keys()) if x not in ['latitude', 'longitude', 'time']]
+            ds = ds \
+                .drop(cleaned_list)
+            
+        if ds.time.shape[0] == 23 and pd.Timestamp(ds.time[0].values).hour==1:
+            missing_time = ds.time[0].values - np.timedelta64(1, 'h')
+            missing_time_da = xr.DataArray([missing_time], dims=["time"], coords=[[missing_time]])
+            full_time = xr.concat([ds.time, missing_time_da], dim="time")
+            ds = ds.reindex(time=full_time, fill_value=np.nan).sortby("time")
+
+
+        ds['time'] = pd.date_range(pd.to_datetime(ds.time.values[0]).strftime('%Y%m%d'),
+                                     pd.to_datetime(ds.time.values[0] + np.timedelta64(1, 'D')).strftime('%Y%m%d'),
+                                     inclusive='left',
+                                     freq='H')
+        ds = ds.transpose('time','latitude','longitude')
+
+
         if 'expver' in list(ds.dims):
             ds = ds.reduce(np.nansum, 'expver')
 
-        for var in list(variables):
-            if not ds[var.lower()].isnull().any():
-                filename = "{:04d}{:02d}{:02d}_{}_ERA5_SL_REANALYSIS.nc".format(chosen_date.year,
-                                                                                chosen_date.month,
-                                                                                chosen_date.day,
-                                                                                var.upper())
-
-                ds[var.lower()].to_netcdf(filename)
-                print(filename)
-                print(ds[var.lower()])
-                fs.put(filename,
-                       os.path.join(Config.BUCKET,
-                                    filename))
-                os.remove(filename)
-    os.remove(download_filename)
+        for var in list(ds.keys()):
+            filename = "{:04d}{:02d}{:02d}_{}_ERA5_LAND_REANALYSIS.nc".format(chosen_date.year,
+                                                                              chosen_date.month,
+                                                                              chosen_date.day,
+                                                                              var.upper())
+            ds[var.lower()].to_netcdf(filename)
+            print(filename)
+            fs.put(filename,
+                   os.path.join(Config.BUCKET,
+                                filename))
+            os.remove(filename)
+    os.remove('tmp.grib2')
+    for f in glob.glob("tmp*.idx"):
+        os.remove(f)
 
 
 if __name__ == '__main__':
