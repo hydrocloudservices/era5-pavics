@@ -12,7 +12,7 @@ from itertools import product
 from config import Config
 
 
-def fetch_era5(date, variables_long_name, download_filename):
+def fetch_era5(date, variables_long_name):
     
     c = cdsapi.Client()
 
