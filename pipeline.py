@@ -18,7 +18,7 @@ def fetch_era5(date, variables_long_name, download_filename):
 
     name = 'reanalysis-era5-single-levels'
 
-    request = {'format': 'netcdf',
+    request = {'format': 'grib',
                'product_type': 'reanalysis',
                'variable': variables_long_name,
                'year': "{:04d}".format(date.year),
@@ -29,7 +29,7 @@ def fetch_era5(date, variables_long_name, download_filename):
 
     r = c.retrieve(name,
                    request,
-                   download_filename)
+                   'tmp.grib2')
 
 
 @task()
@@ -124,7 +124,7 @@ def save_unique_variable_date_file(dates_vars):
             ds = ds.reduce(np.nansum, 'expver')
 
         for var in list(ds.keys()):
-            filename = "{:04d}{:02d}{:02d}_{}_ERA5_LAND_REANALYSIS.nc".format(chosen_date.year,
+            filename = "{:04d}{:02d}{:02d}_{}_ERA5_SL_REANALYSIS.nc".format(chosen_date.year,
                                                                               chosen_date.month,
                                                                               chosen_date.day,
                                                                               var.upper())
