@@ -10,6 +10,7 @@ import itertools
 import numpy as np
 from itertools import product
 from config import Config
+import glob
 
 
 def fetch_era5(date, variables_long_name):
