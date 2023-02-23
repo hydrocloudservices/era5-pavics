@@ -25,7 +25,8 @@ def fetch_era5(date, variables_long_name):
                'year': "{:04d}".format(date.year),
                'month': "{:02d}".format(date.month),
                'day': "{:02d}".format(date.day),
-               'time': Config.TIMES
+               'time': Config.TIMES,
+               'area': [90, -180, -90, 180,]
                }
 
     r = c.retrieve(name,
