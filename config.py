@@ -20,7 +20,12 @@ class Config(object):
     END_DATE = (datetime.utcnow() - timedelta(days=5)).strftime('%Y-%m-%d')
 
     VARIABLES = {'2m_temperature': 't2m',
-                 'total_precipitation': 'tp'} # 'snowfall': 'sf'
+                 'total_precipitation': 'tp',
+                 'snowfall': 'sf',
+                 'maximum_2m_temperature_since_previous_post_processing': 'mx2t',
+                 'minimum_2m_temperature_since_previous_post_processing': 'mn2t',
+                 'surface_solar_radiation_downwards': 'ssrd'
+    }
 
     TIMES = ['00:00', '01:00', '02:00',
              '03:00', '04:00', '05:00',
