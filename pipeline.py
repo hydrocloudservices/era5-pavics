@@ -19,7 +19,8 @@ def fetch_era5(date, variables_long_name):
 
     name = 'reanalysis-era5-single-levels'
 
-    request = {'format': 'grib',
+    request = {'data_format': 'grib',
+               "download_format": "unarchived",
                'product_type': 'reanalysis',
                'variable': variables_long_name,
                'year': "{:04d}".format(date.year),
