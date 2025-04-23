@@ -36,4 +36,4 @@ jobs:
             " > ~/.cdsapirc
 
             python pipeline.py
-      - uses: gautamkrishnar/keepalive-workflow@master # using the workflow with default settings
+      - uses: gautamkrishnar/keepalive-workflow@v2 # using the workflow with default settings
